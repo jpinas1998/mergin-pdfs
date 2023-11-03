@@ -1,24 +1,28 @@
 import glob
-from PyPDF2 import PdfMerger, PdfReader
+import fitz
 
-mergedObject = PdfMerger()
-
-# list all pdf files in current directory
+# List all PDF files in the current directory
 files = glob.glob("*.pdf")
 
 if files:
     print(f"Detected the following files: {files}")
     files.sort()
-    for file in files:
-        mergedObject.append(PdfReader(file, 'rb'))
 
-    print(f"Joining all files into one...")
-    
-    mergedObject.write("pdf-mama.pdf")
+    pdf_document = fitz.open()
+
+    for file in files:
+        pdf_document.insert_pdf(fitz.open(file))
+
+    # Compress the resulting PDF
+    pdf_document.save("all-in-one-compressed.pdf", deflate=True)
+
+    print("Joining and compressing all files into one...")
+
+    pdf_document.close()
 
     print("Done!")
 
 else:
-    print("There are no pdfs in this folder")
+    print("There are no PDFs in this folder")
 
 input("")
