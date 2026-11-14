@@ -13,7 +13,6 @@ if files:
     for file in files:
         pdf_document.insert_pdf(fitz.open(file))
 
-    # Compress the resulting PDF
     pdf_document.save("all-in-one-compressed.pdf", deflate=True)
 
     print("Joining and compressing all files into one...")
